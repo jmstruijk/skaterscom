@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">
+            Find Skate Parks & Ice Rinks Near You
+        </h2>
+        <p class="text-xl mb-8 text-blue-100">
+            Discover the best skateparks, ice skating rinks, and roller rinks across the United States
+        </p>
+        
+        <!-- Search Bar -->
+        <div class="max-w-2xl mx-auto">
+            <form action="/search" method="GET" class="flex gap-2">
+                <input 
+                    type="text" 
+                    name="q" 
+                    placeholder="Search skate parks, ice rinks, roller rinks..." 
+                    class="flex-1 px-6 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                >
+                <button 
+                    type="submit" 
+                    class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+                >
+                    Search
+                </button>
+            </form>
+            
+            <!-- Quick "Near Me" Links -->
+            <div class="mt-6 flex flex-wrap justify-center gap-3">
+                <a href="/skate-parks/near-me" class="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white text-sm font-medium transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    </svg>
+                    Skate Parks Near Me
+                </a>
+                <a href="/ice-rinks/near-me" class="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white text-sm font-medium transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    </svg>
+                    Ice Rinks Near Me
+                </a>
+                <a href="/roller-rinks/near-me" class="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white text-sm font-medium transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    </svg>
+                    Roller Rinks Near Me
+                </a>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-8 mt-12 max-w-3xl mx-auto">
+            <div>
+                <div class="text-4xl font-bold">{{ stats.total_venues }}+</div>
+                <div class="text-blue-200">Venues</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold">{{ stats.cities }}+</div>
+                <div class="text-blue-200">Cities</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold">{{ stats.reviews }}+</div>
+                <div class="text-blue-200">Reviews</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Browse by State -->
+<section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-2xl font-bold text-gray-900">Browse by State</h3>
+            <a href="/locations/states" class="text-blue-600 hover:text-blue-800 font-medium">View All States →</a>
+        </div>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {% for state in popular_states %}
+            <a href="/locations/{{ state.code|lower }}" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center transition-colors">
+                <div class="text-2xl font-bold text-gray-900">{{ state.code }}</div>
+                <div class="text-sm text-gray-600 mt-1">{{ state.venue_count }} {{ 'venue' if state.venue_count == 1 else 'venues' }}</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Popular Cities -->
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-2xl font-bold text-center mb-8">Popular Cities</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for city in popular_cities %}
+            <a href="/locations/{{ city.state|lower }}/{{ city.name|lower|replace(' ', '-') }}" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group">
+                <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
+                    {% if city.image_url %}
+                    <img src="{{ city.image_url }}" 
+                         alt="Skating venues in {{ city.name }}, {{ city.state }}" 
+                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                         loading="lazy"
+                         decoding="async"
+                         onerror="this.style.display='none';">
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4">
+                        <h4 class="text-xl font-bold text-white">{{ city.name }}, {{ city.state }}</h4>
+                        <p class="text-sm text-white/90 mt-1">{{ city.venue_count }} {{ 'venue' if city.venue_count == 1 else 'venues' }}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Sport Types -->
+<section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-2xl font-bold text-center mb-8">Browse by Sport</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <a href="/?sport_type=skateboarding" class="bg-green-50 hover:bg-green-100 rounded-lg p-6 text-center transition-colors">
+                <div class="text-4xl mb-2">🛹</div>
+                <div class="font-semibold text-gray-900">Skateboarding</div>
+                <div class="text-sm text-gray-600">Skateparks & Street</div>
+            </a>
+            <a href="/?sport_type=ice_skating" class="bg-blue-50 hover:bg-blue-100 rounded-lg p-6 text-center transition-colors">
+                <div class="text-4xl mb-2">⛸️</div>
+                <div class="font-semibold text-gray-900">Ice Skating</div>
+                <div class="text-sm text-gray-600">Ice Rinks</div>
+            </a>
+            <a href="/?sport_type=roller_skating" class="bg-purple-50 hover:bg-purple-100 rounded-lg p-6 text-center transition-colors">
+                <div class="text-4xl mb-2">🛼</div>
+                <div class="font-semibold text-gray-900">Roller Skating</div>
+                <div class="text-sm text-gray-600">Roller Rinks</div>
+            </a>
+            <a href="/?sport_type=inline_skating" class="bg-orange-50 hover:bg-orange-100 rounded-lg p-6 text-center transition-colors">
+                <div class="text-4xl mb-2">🛹</div>
+                <div class="font-semibold text-gray-900">Inline Skating</div>
+                <div class="text-sm text-gray-600">Paths & Trails</div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Venues -->
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-2xl font-bold text-gray-900">Featured Venues</h3>
+            <a href="/venues" class="text-blue-600 hover:text-blue-800 font-medium">View All →</a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for venue in venues %}
+            <a href="/venues/{{ venue.slug }}" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                <!-- Venue Image -->
+                <div class="h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                    <img src="{{ venue.image_url.replace('maxwidth=1600', 'maxwidth=400').replace('maxwidth=800', 'maxwidth=400') if venue.image_url and 'maxwidth=' in venue.image_url else venue.image_url }}" 
+                         alt="{{ venue.name }} - {{ venue.sport_type.replace('_', ' ')|title }} venue in {{ venue.city }}, {{ venue.state }}" 
+                         class="w-full h-48 object-cover transition-opacity duration-300"
+                         loading="lazy"
+                         decoding="async"
+                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"
+                         onerror="this.onerror=null; this.src='https://picsum.photos/seed/{{ venue.slug }}/400/300?grayscale';">
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-2">
+                        <h4 class="text-lg font-semibold text-gray-900">{{ venue.name }}</h4>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <span class="ml-1">{{ venue.rating }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center text-sm text-gray-600 mb-3">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span>{{ venue.city }}, {{ venue.state }}</span>
+                    </div>
+                    
+                    <p class="text-gray-700 text-sm mb-4 line-clamp-2">
+                        {{ venue.description }}
+                    </p>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">{{ venue.review_count }} reviews</span>
+                        <span class="text-blue-600 font-medium">View Details →</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Venues -->
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-2xl font-bold text-gray-900">Recently Added Venues</h3>
+            <a href="/venues" class="text-blue-600 hover:text-blue-800 font-medium">View All Venues →</a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for venue in venues %}
+            <a href="/venues/{{ venue.slug }}" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                <div class="h-40 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                    <img src="{{ venue.image_url }}" 
+                         alt="{{ venue.name }} - {{ venue.sport_type.replace('_', ' ')|title }} in {{ venue.city }}, {{ venue.state }}" 
+                         class="w-full h-full object-cover"
+                         loading="lazy">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-2">
+                        <h4 class="text-lg font-semibold text-gray-900">{{ venue.name }}</h4>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <span class="ml-1">{{ venue.rating }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600 mb-3">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span>{{ venue.city }}, {{ venue.state }}</span>
+                    </div>
+                    <p class="text-gray-700 text-sm mb-4 line-clamp-2">
+                        {{ venue.description }}
+                    </p>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">{{ venue.review_count }} reviews</span>
+                        <span class="text-blue-600 font-medium">View Details →</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links Section (SEO) -->
+<section class="py-12 bg-white border-t border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Find Skating Rinks Near You</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Skate Parks -->
+            <div>
+                <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <span class="text-2xl mr-2">🛹</span>
+                    Skate Parks
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/skate-parks/near-me" class="text-blue-600 hover:text-blue-800">Skate Parks Near Me</a></li>
+                    <li><a href="/indoor-skate-parks/near-me" class="text-blue-600 hover:text-blue-800">Indoor Skate Parks</a></li>
+                    <li><a href="/outdoor-skate-parks/near-me" class="text-blue-600 hover:text-blue-800">Outdoor Skate Parks</a></li>
+                    <li><a href="/skate-parks/ca/los-angeles" class="text-gray-600 hover:text-gray-900">Skate Parks in Los Angeles</a></li>
+                    <li><a href="/skate-parks/ny/new-york" class="text-gray-600 hover:text-gray-900">Skate Parks in New York</a></li>
+                    <li><a href="/skate-parks/tx/houston" class="text-gray-600 hover:text-gray-900">Skate Parks in Houston</a></li>
+                </ul>
+            </div>
+            
+            <!-- Ice Rinks -->
+            <div>
+                <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <span class="text-2xl mr-2">⛸️</span>
+                    Ice Rinks
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/ice-rinks" class="text-blue-600 hover:text-blue-800 font-medium">Ice Rinks Guide</a></li>
+                    <li><a href="/ice-rinks/near-me" class="text-blue-600 hover:text-blue-800">Ice Rinks Near Me</a></li>
+                    <li><a href="/indoor-ice-rinks/near-me" class="text-blue-600 hover:text-blue-800">Indoor Ice Rinks</a></li>
+                    <li><a href="/outdoor-ice-rinks/near-me" class="text-blue-600 hover:text-blue-800">Outdoor Ice Rinks</a></li>
+                    <li><a href="/ice-rinks/ny/new-york" class="text-gray-600 hover:text-gray-900">Ice Rinks in New York</a></li>
+                    <li><a href="/ice-rinks/il/chicago" class="text-gray-600 hover:text-gray-900">Ice Rinks in Chicago</a></li>
+                </ul>
+            </div>
+            
+            <!-- Roller Rinks -->
+            <div>
+                <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <span class="text-2xl mr-2">🛼</span>
+                    Roller Rinks
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/roller-rinks/near-me" class="text-blue-600 hover:text-blue-800">Roller Rinks Near Me</a></li>
+                    <li><a href="/roller-rinks/nv/las-vegas" class="text-gray-600 hover:text-gray-900">Roller Rinks in Las Vegas</a></li>
+                    <li><a href="/roller-rinks/ny/new-york" class="text-gray-600 hover:text-gray-900">Roller Rinks in New York</a></li>
+                    <li><a href="/roller-rinks/tx/dallas" class="text-gray-600 hover:text-gray-900">Roller Rinks in Dallas</a></li>
+                    <li><a href="/locations/states" class="text-gray-600 hover:text-gray-900">Browse All States</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Additional Links -->
+        <div class="mt-8 pt-8 border-t border-gray-200">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-center">
+                <a href="/near-me" class="text-blue-600 hover:text-blue-800 font-medium">📍 Find Near Me</a>
+                <a href="/locations/states" class="text-blue-600 hover:text-blue-800">Browse by State</a>
+                <a href="/search" class="text-blue-600 hover:text-blue-800">Advanced Search</a>
+                <a href="/sitemap.xml" class="text-gray-500 hover:text-gray-700">Sitemap</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-blue-600 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h3 class="text-3xl font-bold mb-4">Own a Skating Venue?</h3>
+        <p class="text-xl mb-8 text-blue-100">
+            List your venue on Skaters.com and reach thousands of skating enthusiasts
+        </p>
+        <a href="/venues/add" class="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+            Add Your Venue
+        </a>
+    </div>
+</section>
+{% endblock %}

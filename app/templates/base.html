@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://skaters.com{{ request.url.path }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=1">
+    <link rel="manifest" href="/static/site.webmanifest">
+    
+    <meta name="description" content="{{ meta_description if meta_description else 'Discover the best skating venues in the United States. Find skateparks, ice rinks, roller rinks, and inline skating spots near you with ratings, reviews, and photos.' }}">
+    <meta name="keywords" content="skating venues, skateparks, ice rinks, roller rinks, inline skating">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://skaters.com{{ request.url.path }}">
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:description" content="{{ meta_description }}">
+    <meta property="og:image" content="https://skaters.com/static/images/og-default.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Skaters.com">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://skaters.com{{ request.url.path }}">
+    <meta property="twitter:title" content="{{ page_title }}">
+    <meta property="twitter:description" content="{{ meta_description }}">
+    <meta property="twitter:image" content="https://skaters.com/static/images/og-default.jpg">
+    
+    <title>{{ page_title }}</title>
+    
+    <!-- Tailwind CSS CDN for quick styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center gap-2">
+                    <a href="/" class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">S</span>
+                        </div>
+                        <h1 class="text-2xl font-bold text-gray-900">Skaters.com</h1>
+                    </a>
+                </div>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="/skate-parks" class="text-gray-600 hover:text-gray-900 transition-colors">Skateboarding</a>
+                    <a href="/ice-rinks" class="text-gray-600 hover:text-gray-900 transition-colors">Ice Skating</a>
+                    <a href="/roller-rinks" class="text-gray-600 hover:text-gray-900 transition-colors">Roller Skating</a>
+                    <a href="/inline-skating" class="text-gray-600 hover:text-gray-900 transition-colors">Inline Skating</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <a href="/search" class="text-gray-600 hover:text-gray-900">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </a>
+                    <div class="hidden md:flex items-center gap-4">
+                        {% if user %}
+                        <a href="/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                        <a href="/auth/logout" class="text-gray-600 hover:text-gray-900">Logout</a>
+                        {% else %}
+                        <!-- Login/Register temporarily disabled -->
+                        {% endif %}
+                    </div>
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-600 hover:text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 py-4">
+                <div class="flex flex-col gap-4">
+                    <a href="/skate-parks" class="text-gray-600 hover:text-gray-900 transition-colors">Skateboarding</a>
+                    <a href="/ice-rinks" class="text-gray-600 hover:text-gray-900 transition-colors">Ice Skating</a>
+                    <a href="/roller-rinks" class="text-gray-600 hover:text-gray-900 transition-colors">Roller Skating</a>
+                    <a href="/inline-skating" class="text-gray-600 hover:text-gray-900 transition-colors">Inline Skating</a>
+                    <div class="border-t border-gray-200 pt-4 flex flex-col gap-4">
+                        {% if user %}
+                        <a href="/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                        <a href="/auth/logout" class="text-gray-600 hover:text-gray-900">Logout</a>
+                        {% else %}
+                        <!-- Login/Register temporarily disabled -->
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Flash Messages -->
+        <div id="flash-messages" class="fixed top-20 right-4 z-50 space-y-2">
+            {% if request.state.messages %}
+                {% for msg in request.state.messages %}
+                <div class="flash-message bg-{{ 'green' if msg.category == 'success' else 'red' if msg.category == 'error' else 'yellow' if msg.category == 'warning' else 'blue' }}-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center justify-between max-w-md animate-slide-in">
+                    <div class="flex items-center">
+                        {% if msg.category == 'success' %}
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        {% elif msg.category == 'error' %}
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        {% elif msg.category == 'warning' %}
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        {% else %}
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {% endif %}
+                        <span>{{ msg.message }}</span>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">S</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Skaters.com</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Find skate parks, ice rinks, and roller rinks across the United States.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Find Rinks</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/skate-parks/near-me" class="hover:text-white transition-colors">Skate Parks Near Me</a></li>
+                        <li><a href="/ice-rinks/near-me" class="hover:text-white transition-colors">Ice Rinks Near Me</a></li>
+                        <li><a href="/roller-rinks/near-me" class="hover:text-white transition-colors">Roller Rinks Near Me</a></li>
+                        <li><a href="/ice-rinks" class="hover:text-white transition-colors">Ice Rinks Guide</a></li>
+                        <li><a href="/locations/states" class="hover:text-white transition-colors">Browse by State</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="/contact" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="/advertise" class="hover:text-white transition-colors">Advertise</a></li>
+                        <li><a href="/api" class="hover:text-white transition-colors">API</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="/terms" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="/cookies" class="hover:text-white transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Skaters.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+    
+    <!-- Image Loading Optimization -->
+    <script>
+        // Add loaded class when images finish loading
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            
+            images.forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', function() {
+                        this.classList.add('loaded');
+                    });
+                }
+            });
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // Auto-dismiss flash messages after 5 seconds
+        document.querySelectorAll('.flash-message').forEach(msg => {
+            setTimeout(() => {
+                msg.style.opacity = '0';
+                msg.style.transform = 'translateX(100%)';
+                setTimeout(() => msg.remove(), 300);
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

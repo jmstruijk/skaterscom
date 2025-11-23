@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found | Skaters.com{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full text-center">
+        <div class="mb-8">
+            <h1 class="text-9xl font-bold text-blue-600">404</h1>
+            <h2 class="mt-4 text-3xl font-bold text-gray-900">Page Not Found</h2>
+            <p class="mt-2 text-gray-600">
+                Sorry, we couldn't find the page you're looking for.
+            </p>
+        </div>
+        
+        <div class="space-y-4">
+            <a href="/" class="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                Go to Homepage
+            </a>
+            
+            <a href="/search" class="block w-full border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                Search Venues
+            </a>
+        </div>
+        
+        <div class="mt-8">
+            <p class="text-sm text-gray-500">
+                Looking for something specific? Try these popular pages:
+            </p>
+            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                <a href="/locations/states" class="text-blue-600 hover:text-blue-800 text-sm">Browse States</a>
+                <span class="text-gray-300">•</span>
+                <a href="/skate-parks/near-me" class="text-blue-600 hover:text-blue-800 text-sm">Skate Parks Near Me</a>
+                <span class="text-gray-300">•</span>
+                <a href="/ice-rinks/near-me" class="text-blue-600 hover:text-blue-800 text-sm">Ice Rinks Near Me</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

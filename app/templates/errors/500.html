@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error | Skaters.com{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full text-center">
+        <div class="mb-8">
+            <h1 class="text-9xl font-bold text-red-600">500</h1>
+            <h2 class="mt-4 text-3xl font-bold text-gray-900">Server Error</h2>
+            <p class="mt-2 text-gray-600">
+                Oops! Something went wrong on our end. We're working to fix it.
+            </p>
+        </div>
+        
+        <div class="space-y-4">
+            <a href="/" class="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                Go to Homepage
+            </a>
+            
+            <button onclick="window.location.reload()" class="block w-full border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                Try Again
+            </button>
+        </div>
+        
+        <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+            <p class="text-sm text-gray-700">
+                <strong>Need help?</strong> Contact us at 
+                <a href="mailto:support@skaters.com" class="text-blue-600 hover:text-blue-800">support@skaters.com</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

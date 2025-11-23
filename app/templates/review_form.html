@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <nav class="flex text-sm text-gray-600 mb-4">
+                <a href="/" class="hover:text-gray-900">Home</a>
+                <span class="mx-2">/</span>
+                <a href="/venues/{{ venue.slug }}" class="hover:text-gray-900">{{ venue.name }}</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900">Write Review</span>
+            </nav>
+            <h1 class="text-3xl font-bold text-gray-900">Write a Review</h1>
+            <p class="text-gray-600 mt-2">Share your experience at {{ venue.name }}</p>
+        </div>
+
+        <!-- Review Form -->
+        <div class="bg-white rounded-lg shadow-sm p-8">
+            <form action="/reviews/submit" method="POST" class="space-y-6">
+                <input type="hidden" name="venue_id" value="{{ venue.id }}">
+                
+                <!-- Rating -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-900 mb-3">
+                        Overall Rating <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center gap-2">
+                        <div class="flex gap-1" id="star-rating">
+                            {% for i in range(1, 6) %}
+                            <button 
+                                type="button" 
+                                class="star-btn text-4xl text-gray-300 hover:text-yellow-500 transition-colors"
+                                data-rating="{{ i }}"
+                            >
+                                ★
+                            </button>
+                            {% endfor %}
+                        </div>
+                        <span id="rating-text" class="text-sm text-gray-600 ml-2"></span>
+                    </div>
+                    <input type="hidden" name="rating" id="rating-input" required>
+                </div>
+
+                <!-- Title -->
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-900 mb-2">
+                        Review Title (Optional)
+                    </label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        maxlength="200"
+                        placeholder="Sum up your experience in one line"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                    <p class="text-xs text-gray-500 mt-1">Example: "Amazing park with great features!"</p>
+                </div>
+
+                <!-- Comment -->
+                <div>
+                    <label for="comment" class="block text-sm font-medium text-gray-900 mb-2">
+                        Your Review <span class="text-red-500">*</span>
+                    </label>
+                    <textarea 
+                        id="comment" 
+                        name="comment" 
+                        rows="8" 
+                        required
+                        minlength="50"
+                        maxlength="2000"
+                        placeholder="Tell us about your experience... What did you like? What could be improved? Any tips for other skaters?"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    ></textarea>
+                    <p class="text-xs text-gray-500 mt-1">Minimum 50 characters. Be specific and helpful!</p>
+                </div>
+
+                <!-- Guidelines -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-blue-900 mb-2">Review Guidelines</h3>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Be honest and constructive</li>
+                        <li>• Focus on your personal experience</li>
+                        <li>• Mention specific features or amenities</li>
+                        <li>• Keep it respectful and appropriate</li>
+                        <li>• Reviews are moderated before publishing</li>
+                    </ul>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="flex gap-4 pt-4">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                    >
+                        Submit Review
+                    </button>
+                    <a 
+                        href="/venues/{{ venue.slug }}" 
+                        class="flex-1 text-center border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Venue Info Card -->
+        <div class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h3 class="font-semibold text-gray-900 mb-2">Reviewing:</h3>
+            <div class="flex items-center">
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">{{ venue.name }}</p>
+                    <p class="text-sm text-gray-600">{{ venue.city }}, {{ venue.state }}</p>
+                </div>
+                <a href="/venues/{{ venue.slug }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                    View Venue →
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Star rating functionality
+const stars = document.querySelectorAll('.star-btn');
+const ratingInput = document.getElementById('rating-input');
+const ratingText = document.getElementById('rating-text');
+let selectedRating = 0;
+
+const ratingLabels = {
+    1: 'Poor',
+    2: 'Fair',
+    3: 'Good',
+    4: 'Very Good',
+    5: 'Excellent'
+};
+
+stars.forEach(star => {
+    star.addEventListener('click', function() {
+        selectedRating = parseInt(this.dataset.rating);
+        ratingInput.value = selectedRating;
+        updateStars();
+    });
+    
+    star.addEventListener('mouseenter', function() {
+        const rating = parseInt(this.dataset.rating);
+        highlightStars(rating);
+    });
+});
+
+document.getElementById('star-rating').addEventListener('mouseleave', function() {
+    updateStars();
+});
+
+function highlightStars(rating) {
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.classList.remove('text-gray-300');
+            star.classList.add('text-yellow-500');
+        } else {
+            star.classList.remove('text-yellow-500');
+            star.classList.add('text-gray-300');
+        }
+    });
+    ratingText.textContent = ratingLabels[rating] || '';
+}
+
+function updateStars() {
+    highlightStars(selectedRating);
+}
+
+// Character counter for comment
+const commentTextarea = document.getElementById('comment');
+commentTextarea.addEventListener('input', function() {
+    const length = this.value.length;
+    const parent = this.parentElement;
+    let counter = parent.querySelector('.char-counter');
+    
+    if (!counter) {
+        counter = document.createElement('p');
+        counter.className = 'char-counter text-xs text-gray-500 mt-1 text-right';
+        parent.appendChild(counter);
+    }
+    
+    counter.textContent = `${length} / 2000 characters`;
+    
+    if (length < 50) {
+        counter.classList.add('text-red-500');
+    } else {
+        counter.classList.remove('text-red-500');
+    }
+});
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    if (!ratingInput.value) {
+        e.preventDefault();
+        alert('Please select a rating');
+        return false;
+    }
+    
+    if (commentTextarea.value.length < 50) {
+        e.preventDefault();
+        alert('Please write at least 50 characters in your review');
+        return false;
+    }
+});
+</script>
+{% endblock %}

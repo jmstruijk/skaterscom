@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!-- SEO Meta Tags -->
+<meta name="description" content="{{ meta_description }}">
+<meta name="keywords" content="{{ sport_keyword }} {{ city }}, {{ sport_plural }} {{ city }}, {{ sport_keyword }} {{ state_code }}, {{ city }} {{ sport_keyword }}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ meta_description }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.url }}">
+
+<!-- Structured Data - Breadcrumb -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ request.url.scheme }}://{{ request.url.netloc }}"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "{{ sport_plural }}",
+    "item": "{{ request.url.scheme }}://{{ request.url.netloc }}/?sport_type={{ sport_type }}"
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ state_code }}",
+    "item": "{{ request.url.scheme }}://{{ request.url.netloc }}/{{ state_code }}"
+  },{
+    "@type": "ListItem",
+    "position": 4,
+    "name": "{{ city }}",
+    "item": "{{ request.url }}"
+  }]
+}
+</script>
+
+<!-- Structured Data - FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in faq_items %}
+    {
+      "@type": "Question",
+      "name": "{{ faq.question }}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{ faq.answer }}"
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+
+<!-- Structured Data - Collection Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "{{ sport_plural }} in {{ city }}, {{ state_code }}",
+  "description": "{{ meta_description }}",
+  "url": "{{ request.url }}",
+  "numberOfItems": {{ total_venues }},
+  "about": {
+    "@type": "Place",
+    "name": "{{ city }}, {{ state_code }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex text-sm text-gray-600">
+        <a href="/" class="hover:text-gray-900 transition-colors">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/?sport_type={{ sport_type }}" class="hover:text-gray-900 transition-colors">{{ sport_plural }}</a>
+        <span class="mx-2">/</span>
+        <a href="/{{ state_code }}" class="hover:text-gray-900 transition-colors">{{ state_code }}</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-900">{{ city }}</span>
+    </nav>
+</div>
+
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ sport_plural }} in {{ city }}, {{ state_code }}</h1>
+        <p class="text-xl text-blue-100 mb-6">
+            Discover the best {{ sport_plural.lower() }} in {{ city }}. Browse {{ total_venues }} venues with photos, reviews, and directions.
+        </p>
+        <div class="flex flex-wrap gap-6 text-lg">
+            <div class="flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+                <span class="font-semibold">{{ total_venues }} Venues</span>
+            </div>
+            <div class="flex items-center">
+                <svg class="w-6 h-6 mr-2 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+                <span class="font-semibold">{{ avg_rating }} Avg Rating</span>
+            </div>
+            <div class="flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-semibold">{{ total_reviews }} Reviews</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- SEO Content -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Find the Best {{ sport_plural }} in {{ city }}</h2>
+        <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+                Looking for {{ sport_plural.lower() }} in {{ city }}, {{ state_code }}? You've come to the right place! 
+                We've compiled a comprehensive directory of all {{ total_venues }} {{ sport_plural.lower() }} in the {{ city }} area, 
+                complete with ratings, reviews, photos, and contact information.
+            </p>
+            <p class="mb-4">
+                Whether you're a beginner or experienced skater, {{ city }} offers a variety of {{ sport_plural.lower() }} 
+                to suit your needs. Browse our listings below to find the perfect venue for your next skating session.
+            </p>
+        </div>
+    </div>
+
+    <!-- Venues Grid -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">All {{ sport_plural }} in {{ city }}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for venue in venues %}
+            <a href="/venues/{{ venue.slug }}" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                <!-- Venue Image -->
+                <div class="h-48 bg-gray-100 overflow-hidden">
+                    <img src="{{ venue.image_url }}" 
+                         alt="{{ venue.name }} - {{ sport_singular }} in {{ city }}" 
+                         class="w-full h-48 object-cover transition-opacity duration-300"
+                         loading="lazy"
+                         decoding="async"
+                         onerror="this.onerror=null; this.src='https://picsum.photos/seed/{{ venue.slug }}/400/300?grayscale';">
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-2">
+                        <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">{{ venue.name }}</h3>
+                        <div class="flex items-center text-sm text-gray-600 ml-2">
+                            <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <span class="ml-1 font-semibold">{{ venue.rating }}</span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-gray-600 mb-3">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        {{ venue.address }}
+                    </p>
+                    
+                    <p class="text-sm text-gray-500 mb-3 line-clamp-2">{{ venue.description }}</p>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">{{ venue.review_count }} reviews</span>
+                        <span class="text-blue-600 font-medium">View Details →</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+            {% for faq in faq_items %}
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ faq.question }}</h3>
+                <p class="text-gray-700">{{ faq.answer }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Related Links -->
+    <div class="bg-gray-50 rounded-lg p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Related Searches</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <a href="/skate-parks/{{ state_code|lower }}/{{ city|lower|replace(' ', '-') }}" class="text-blue-600 hover:text-blue-800 text-sm">Skate Parks in {{ city }}</a>
+            <a href="/ice-rinks/{{ state_code|lower }}/{{ city|lower|replace(' ', '-') }}" class="text-blue-600 hover:text-blue-800 text-sm">Ice Rinks in {{ city }}</a>
+            <a href="/roller-rinks/{{ state_code|lower }}/{{ city|lower|replace(' ', '-') }}" class="text-blue-600 hover:text-blue-800 text-sm">Roller Rinks in {{ city }}</a>
+            <a href="/{{ state_code }}" class="text-blue-600 hover:text-blue-800 text-sm">All Venues in {{ state_code }}</a>
+            <a href="/?sport_type={{ sport_type }}" class="text-blue-600 hover:text-blue-800 text-sm">All {{ sport_plural }}</a>
+            <a href="/states" class="text-blue-600 hover:text-blue-800 text-sm">Browse by State</a>
+        </div>
+    </div>
+
+</main>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Find Skating Rinks Near You</h1>
+            <p class="text-xl md:text-2xl text-blue-100 mb-8">
+                Discover skate parks, ice rinks, and roller rinks in your area
+            </p>
+            <button onclick="findNearMe()" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                📍 Use My Location
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Browse by Sport Type -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Browse by Sport Type</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Skate Parks -->
+            <a href="/skate-parks/near-me" class="bg-white rounded-lg shadow-md p-8 hover:shadow-xl transition-shadow text-center">
+                <div class="text-6xl mb-4">🛹</div>
+                <h3 class="text-2xl font-semibold text-gray-900 mb-2">Skate Parks</h3>
+                <p class="text-gray-600 mb-4">Find skateboarding parks and facilities near you</p>
+                <span class="text-blue-600 font-medium">Find Skate Parks →</span>
+            </a>
+
+            <!-- Ice Rinks -->
+            <a href="/ice-rinks/near-me" class="bg-white rounded-lg shadow-md p-8 hover:shadow-xl transition-shadow text-center">
+                <div class="text-6xl mb-4">⛸️</div>
+                <h3 class="text-2xl font-semibold text-gray-900 mb-2">Ice Rinks</h3>
+                <p class="text-gray-600 mb-4">Discover ice skating rinks in your area</p>
+                <span class="text-blue-600 font-medium">Find Ice Rinks →</span>
+            </a>
+
+            <!-- Roller Rinks -->
+            <a href="/roller-rinks/near-me" class="bg-white rounded-lg shadow-md p-8 hover:shadow-xl transition-shadow text-center">
+                <div class="text-6xl mb-4">🛼</div>
+                <h3 class="text-2xl font-semibold text-gray-900 mb-2">Roller Rinks</h3>
+                <p class="text-gray-600 mb-4">Find roller skating rinks nearby</p>
+                <span class="text-blue-600 font-medium">Find Roller Rinks →</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Indoor/Outdoor Options -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Indoor or Outdoor?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <a href="/indoor-skate-parks/near-me" class="bg-blue-50 rounded-lg p-6 hover:bg-blue-100 transition-colors">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">🏢 Indoor Skate Parks</h3>
+                <p class="text-gray-700">Climate-controlled skateparks for year-round skating</p>
+            </a>
+
+            <a href="/outdoor-skate-parks/near-me" class="bg-green-50 rounded-lg p-6 hover:bg-green-100 transition-colors">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">🌤️ Outdoor Skate Parks</h3>
+                <p class="text-gray-700">Open-air skateparks with street courses and bowls</p>
+            </a>
+
+            <a href="/indoor-ice-rinks/near-me" class="bg-blue-50 rounded-lg p-6 hover:bg-blue-100 transition-colors">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">🏢 Indoor Ice Rinks</h3>
+                <p class="text-gray-700">Year-round ice skating facilities</p>
+            </a>
+
+            <a href="/outdoor-ice-rinks/near-me" class="bg-green-50 rounded-lg p-6 hover:bg-green-100 transition-colors">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">❄️ Outdoor Ice Rinks</h3>
+                <p class="text-gray-700">Seasonal outdoor ice skating experiences</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Results Container (populated by JavaScript) -->
+    <div id="results" class="hidden">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Venues Near You</h2>
+        <div id="venues-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Venues will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="hidden text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <p class="mt-4 text-gray-600">Finding venues near you...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="hidden text-center py-12">
+        <p class="text-red-600 mb-4">Unable to get your location. Please enable location services or browse by state.</p>
+        <a href="/locations/states" class="text-blue-600 hover:text-blue-800">Browse by State →</a>
+    </div>
+
+    <!-- Browse by Location -->
+    <section class="mt-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Or Browse by Location</h2>
+        <div class="text-center">
+            <a href="/locations/states" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                Browse All States
+            </a>
+        </div>
+    </section>
+</div>
+
+<script>
+function findNearMe() {
+    if (!navigator.geolocation) {
+        document.getElementById('error').classList.remove('hidden');
+        return;
+    }
+
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('error').classList.add('hidden');
+
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const { latitude, longitude } = position.coords;
+            
+            try {
+                const response = await fetch(`/api/venues/nearby?lat=${latitude}&lng=${longitude}&radius=50`);
+                const venues = await response.json();
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('results').classList.remove('hidden');
+                
+                const venuesList = document.getElementById('venues-list');
+                venuesList.innerHTML = venues.map(venue => `
+                    <a href="/venues/${venue.slug}" class="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${venue.name}</h3>
+                        <p class="text-gray-600 mb-2">${venue.city}, ${venue.state}</p>
+                        <p class="text-sm text-gray-500 mb-2">${venue.distance} miles away</p>
+                        <div class="flex items-center">
+                            <span class="text-yellow-500">★</span>
+                            <span class="ml-1 font-semibold">${venue.rating}</span>
+                            <span class="ml-1 text-gray-500">(${venue.review_count} reviews)</span>
+                        </div>
+                    </a>
+                `).join('');
+            } catch (error) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+            }
+        },
+        (error) => {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+        }
+    );
+}
+</script>
+{% endblock %}

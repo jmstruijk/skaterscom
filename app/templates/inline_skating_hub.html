@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-green-600 to-teal-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Inline Skating</h1>
+            <p class="text-xl md:text-2xl text-green-100 mb-8">
+                Discover the best inline skating venues across the United States
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="/search?sport_type=inline_skating" class="inline-block bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors">
+                    Browse All Inline Skating Venues
+                </a>
+                <a href="/inline-skating/near-me" class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors">
+                    Find Near Me
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- What is Inline Skating Section -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">What is Inline Skating?</h2>
+        <div class="prose prose-lg max-w-none">
+            <p class="text-gray-700 leading-relaxed mb-4">
+                Inline skating, also known as rollerblading, is a form of skating using boots with wheels arranged in a single line. Inline skating combines elements of ice skating and roller skating, offering a smooth, fast-paced experience on paved surfaces. It's popular for recreation, fitness, urban transportation, and competitive sports.
+            </p>
+            <p class="text-gray-700 leading-relaxed">
+                Inline skating venues include dedicated skate paths, bike trails, boardwalks, parks, and specialized facilities. Many cities offer miles of paved trails perfect for inline skating, while some facilities provide indoor spaces for year-round skating regardless of weather conditions.
+            </p>
+        </div>
+    </section>
+
+    <!-- Types of Inline Skating Venues -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Types of Inline Skating Venues</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Paved Trails -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🛤️</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Paved Trails</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Dedicated bike and skating paths with smooth pavement. Perfect for long-distance skating, fitness, and scenic rides through parks and urban areas.
+                </p>
+                <a href="/search?sport_type=inline_skating" class="text-green-600 hover:text-green-800 font-medium">
+                    Find Paved Trails →
+                </a>
+            </div>
+
+            <!-- Boardwalks & Promenades -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🌊</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Boardwalks & Promenades</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Waterfront skating areas along beaches, lakes, and rivers. Scenic routes perfect for recreational skating with beautiful views.
+                </p>
+                <a href="/search?sport_type=inline_skating" class="text-green-600 hover:text-green-800 font-medium">
+                    Find Boardwalks →
+                </a>
+            </div>
+
+            <!-- Skate Parks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🏞️</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Skate Parks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Parks with ramps, rails, and obstacles suitable for inline skating. Great for tricks, aggressive skating, and skill development.
+                </p>
+                <a href="/search?sport_type=inline_skating" class="text-green-600 hover:text-green-800 font-medium">
+                    Find Skate Parks →
+                </a>
+            </div>
+
+            <!-- Indoor Facilities -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🏢</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Indoor Facilities</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Climate-controlled indoor spaces for year-round skating. Perfect for lessons, practice, and skating regardless of weather.
+                </p>
+                <a href="/search?sport_type=inline_skating" class="text-green-600 hover:text-green-800 font-medium">
+                    Find Indoor Facilities →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inline Skating Activities -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Popular Inline Skating Activities</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🏃</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Fitness Skating</h4>
+                </div>
+                <p class="text-gray-700">
+                    Cardiovascular exercise and endurance training on smooth paved surfaces.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🎯</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Aggressive Skating</h4>
+                </div>
+                <p class="text-gray-700">
+                    Tricks, grinds, and stunts on rails, ramps, and obstacles in skate parks.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🏁</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Speed Skating</h4>
+                </div>
+                <p class="text-gray-700">
+                    Racing and time trials on smooth, flat surfaces for maximum speed.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🚶</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Recreational Skating</h4>
+                </div>
+                <p class="text-gray-700">
+                    Casual skating for fun, relaxation, and enjoying scenic routes.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🎓</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Skating Lessons</h4>
+                </div>
+                <p class="text-gray-700">
+                    Learn to skate programs for beginners and advanced technique classes.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🏒</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Inline Hockey</h4>
+                </div>
+                <p class="text-gray-700">
+                    Street hockey played on inline skates with leagues and tournaments.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse by Location -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Browse Inline Skating Venues by Location</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <a href="/locations/ca/los-angeles" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Los Angeles</h3>
+                <p class="text-sm text-gray-600">Inline Skating in CA</p>
+            </a>
+            <a href="/locations/ny/new-york" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">New York</h3>
+                <p class="text-sm text-gray-600">Inline Skating in NY</p>
+            </a>
+            <a href="/locations/fl/miami" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Miami</h3>
+                <p class="text-sm text-gray-600">Inline Skating in FL</p>
+            </a>
+            <a href="/locations/ca/san-diego" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">San Diego</h3>
+                <p class="text-sm text-gray-600">Inline Skating in CA</p>
+            </a>
+            <a href="/locations/il/chicago" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Chicago</h3>
+                <p class="text-sm text-gray-600">Inline Skating in IL</p>
+            </a>
+            <a href="/locations/tx/houston" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Houston</h3>
+                <p class="text-sm text-gray-600">Inline Skating in TX</p>
+            </a>
+            <a href="/locations/wa/seattle" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Seattle</h3>
+                <p class="text-sm text-gray-600">Inline Skating in WA</p>
+            </a>
+            <a href="/locations/co/denver" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Denver</h3>
+                <p class="text-sm text-gray-600">Inline Skating in CO</p>
+            </a>
+        </div>
+        <div class="mt-8 text-center">
+            <a href="/locations/states" class="text-green-600 hover:text-green-800 font-semibold text-lg">
+                View All States →
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-r from-green-600 to-teal-600 rounded-2xl p-12 text-center text-white">
+        <h2 class="text-3xl font-bold mb-4">Ready to Roll?</h2>
+        <p class="text-xl mb-8 text-green-100">
+            Browse inline skating venues by location with ratings, reviews, hours, and directions
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="/search?sport_type=inline_skating" class="inline-block bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors">
+                Browse All Inline Skating Venues
+            </a>
+            <a href="/inline-skating/near-me" class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors">
+                Find Near Me
+            </a>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

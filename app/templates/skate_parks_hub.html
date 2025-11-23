@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Skate Parks</h1>
+            <p class="text-xl md:text-2xl text-blue-100 mb-8">
+                Discover the best skateboarding venues across the United States
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="/search?sport_type=skateboarding" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                    Browse All Skate Parks
+                </a>
+                <a href="/skate-parks/near-me" class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                    Find Near Me
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- What is a Skate Park Section -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">What is a Skate Park?</h2>
+        <div class="prose prose-lg max-w-none">
+            <p class="text-gray-700 leading-relaxed mb-4">
+                A skate park is a purpose-built recreational facility designed for skateboarding, BMX biking, scootering, and inline skating. Skate parks feature various obstacles and terrain including ramps, rails, ledges, stairs, bowls, and vert ramps that allow riders to perform tricks and practice their skills in a safe, controlled environment.
+            </p>
+            <p class="text-gray-700 leading-relaxed">
+                Modern skate parks range from simple concrete slabs with basic obstacles to elaborate facilities with multiple sections catering to different skill levels. They can be indoor or outdoor, free public parks or paid private facilities, and serve everyone from beginners learning basics to professional skaters perfecting advanced tricks.
+            </p>
+        </div>
+    </section>
+
+    <!-- Types of Skate Parks -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Types of Skate Parks</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Indoor Skate Parks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🏢</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Indoor Skate Parks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Climate-controlled facilities that operate year-round regardless of weather. Perfect for consistent practice, lessons, and events. Often feature wood or concrete obstacles.
+                </p>
+                <a href="/indoor-skate-parks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Indoor Skate Parks →
+                </a>
+            </div>
+
+            <!-- Outdoor Skate Parks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🌞</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Outdoor Skate Parks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Open-air concrete parks that are free and accessible to the public. Features street-style obstacles, bowls, and transition elements. Popular community gathering spots.
+                </p>
+                <a href="/outdoor-skate-parks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Outdoor Skate Parks →
+                </a>
+            </div>
+
+            <!-- Street Plazas -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🏙️</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Street Plazas</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Parks designed to mimic real street skating with stairs, rails, ledges, and gaps. Perfect for technical street skating and learning urban-style tricks.
+                </p>
+                <a href="/skate-parks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Street Plazas →
+                </a>
+            </div>
+
+            <!-- Vert & Bowl Parks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🏆</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Vert & Bowl Parks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Parks featuring half-pipes, vert ramps, and bowl sections for transition skating. Ideal for aerial tricks, carving, and high-speed runs.
+                </p>
+                <a href="/skate-parks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Vert & Bowl Parks →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skate Park Features -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Popular Skate Park Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🛹</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Street Obstacles</h4>
+                </div>
+                <p class="text-gray-700">
+                    Rails, ledges, stairs, and gaps for technical street skating tricks.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🌊</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Bowls & Pools</h4>
+                </div>
+                <p class="text-gray-700">
+                    Deep concrete bowls for carving, grinding, and aerial tricks.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">📐</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Ramps & Transitions</h4>
+                </div>
+                <p class="text-gray-700">
+                    Quarter pipes, half-pipes, and banks for transition skating.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🎓</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Beginner Areas</h4>
+                </div>
+                <p class="text-gray-700">
+                    Smaller obstacles and flat areas perfect for learning basics.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🎪</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Flow Sections</h4>
+                </div>
+                <p class="text-gray-700">
+                    Connected obstacles for continuous riding and building speed.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-6">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">💡</span>
+                    <h4 class="text-xl font-semibold text-gray-900">Night Lighting</h4>
+                </div>
+                <p class="text-gray-700">
+                    Parks with lights for evening and night skating sessions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse by Location -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Browse Skate Parks by Location</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <a href="/skate-parks/ca/los-angeles" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Los Angeles</h3>
+                <p class="text-sm text-gray-600">Skate Parks in CA</p>
+            </a>
+            <a href="/skate-parks/ny/new-york" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">New York</h3>
+                <p class="text-sm text-gray-600">Skate Parks in NY</p>
+            </a>
+            <a href="/skate-parks/ca/san-diego" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">San Diego</h3>
+                <p class="text-sm text-gray-600">Skate Parks in CA</p>
+            </a>
+            <a href="/skate-parks/tx/houston" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Houston</h3>
+                <p class="text-sm text-gray-600">Skate Parks in TX</p>
+            </a>
+            <a href="/skate-parks/fl/miami" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Miami</h3>
+                <p class="text-sm text-gray-600">Skate Parks in FL</p>
+            </a>
+            <a href="/skate-parks/il/chicago" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Chicago</h3>
+                <p class="text-sm text-gray-600">Skate Parks in IL</p>
+            </a>
+            <a href="/skate-parks/ca/san-francisco" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">San Francisco</h3>
+                <p class="text-sm text-gray-600">Skate Parks in CA</p>
+            </a>
+            <a href="/skate-parks/wa/seattle" class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900 mb-1">Seattle</h3>
+                <p class="text-sm text-gray-600">Skate Parks in WA</p>
+            </a>
+        </div>
+        <div class="mt-8 text-center">
+            <a href="/locations/states" class="text-blue-600 hover:text-blue-800 font-semibold text-lg">
+                View All States →
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-center text-white">
+        <h2 class="text-3xl font-bold mb-4">Ready to Shred?</h2>
+        <p class="text-xl mb-8 text-blue-100">
+            Browse skate parks by location with ratings, reviews, hours, and directions
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="/search?sport_type=skateboarding" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                Browse All Skate Parks
+            </a>
+            <a href="/skate-parks/near-me" class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                Find Near Me
+            </a>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

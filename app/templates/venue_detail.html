@@ -1,0 +1,559 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!-- LocalBusiness Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["SportsActivityLocation", "LocalBusiness"],
+  "name": "{{ venue.name }}",
+  "description": "{{ venue.description if venue.description else venue.name + ' in ' + venue.city + ', ' + venue.state }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ venue.address }}",
+    "addressLocality": "{{ venue.city }}",
+    "addressRegion": "{{ venue.state }}",
+    "postalCode": "{{ venue.zip_code }}",
+    "addressCountry": "US"
+  },
+  {% if venue.latitude and venue.longitude %}
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ venue.latitude }},
+    "longitude": {{ venue.longitude }}
+  },
+  {% endif %}
+  {% if venue.phone %}
+  "telephone": "{{ venue.phone }}",
+  {% endif %}
+  {% if venue.website %}
+  "url": "{{ venue.website }}",
+  {% endif %}
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ venue.rating }},
+    "reviewCount": {{ venue.review_count }},
+    "bestRating": "5",
+    "worstRating": "1"
+  }{% if venue.photos %},
+  "image": [
+    {% for photo in venue.photos[:5] %}
+    "{{ photo.url }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]{% endif %}{% if venue.pricing %},
+  "priceRange": "{{ venue.pricing.admission if venue.pricing.admission else 'Free' }}"
+  {% endif %}
+}
+</script>
+
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "https://skaters.com"
+  }, {
+    "@type": "ListItem",
+    "position": 2,
+    "name": "{{ venue.state }}",
+    "item": "https://skaters.com/locations/{{ venue.state|lower }}"
+  }, {
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ venue.city }}",
+    "item": "https://skaters.com/locations/{{ venue.state|lower }}/{{ venue.city|lower|replace(' ', '-') }}"
+  }, {
+    "@type": "ListItem",
+    "position": 4,
+    "name": "{{ venue.name }}"
+  }]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex text-sm text-gray-600">
+        <a href="/" class="hover:text-gray-900 transition-colors">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/?sport_type={{ venue.sport_type }}" class="hover:text-gray-900 transition-colors capitalize">
+            {{ venue.sport_type.replace('_', ' ') }}
+        </a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-900">{{ venue.name }}</span>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Main Info -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Header -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-2xl">
+                                {% if venue.sport_type == 'skateboarding' %}🛹
+                                {% elif venue.sport_type == 'ice_skating' %}⛸️
+                                {% elif venue.sport_type == 'roller_skating' %}🛼
+                                {% else %}🛹{% endif %}
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-sm font-medium 
+                                {% if venue.sport_type == 'skateboarding' %}bg-green-100 text-green-800
+                                {% elif venue.sport_type == 'ice_skating' %}bg-blue-100 text-blue-800
+                                {% elif venue.sport_type == 'roller_skating' %}bg-purple-100 text-purple-800
+                                {% else %}bg-orange-100 text-orange-800{% endif %}">
+                                {{ venue.sport_type.replace('_', ' ').title() }}
+                            </span>
+                            {% if venue.verified %}
+                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                ✓ Verified
+                            </span>
+                            {% endif %}
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ venue.name }}</h1>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="text-lg">{{ venue.address }}, {{ venue.city }}, {{ venue.state }} {{ venue.zip_code }}</span>
+                        </div>
+                        <div class="flex items-center gap-6 text-sm text-gray-600">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-yellow-500 fill-current mr-1" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <span class="font-semibold">{{ venue.rating }}</span>
+                                <span class="ml-1">({{ venue.review_count }} reviews)</span>
+                            </div>
+                            {% if venue.year_opened %}
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span>Opened {{ venue.year_opened }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if venue.description %}
+                {# Only show description if it's not just the name and address #}
+                {% set desc_lower = venue.description.lower() %}
+                {% set name_lower = venue.name.lower() %}
+                {% set address_lower = venue.address.lower() if venue.address else '' %}
+                {% set show_description = not (name_lower in desc_lower and address_lower in desc_lower and ' - ' in venue.description) and venue.description|length > 20 %}
+                {% if show_description %}
+                <p class="text-gray-700 text-lg leading-relaxed">{{ venue.description }}</p>
+                {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- Photo Gallery -->
+            {% if venue.photos %}
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Photos ({{ venue.photos|length }})</h2>
+                <div class="space-y-4">
+                    <!-- Main Photo -->
+                    <div class="relative aspect-video rounded-lg overflow-hidden bg-gray-100 cursor-pointer" onclick="openLightbox(0)">
+                        {% if venue.photos[0].url %}
+                        <img src="{{ venue.photos[0].url.replace('maxwidth=1600', 'maxwidth=800') if 'maxwidth=' in venue.photos[0].url else venue.photos[0].url + '&maxwidth=800' }}" 
+                             alt="{{ venue.photos[0].caption }}" 
+                             class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-95"
+                             loading="lazy"
+                             decoding="async"
+                             style="background: linear-gradient(to right, #f3f4f6, #e5e7eb);"
+                             onerror="this.onerror=null; this.src='https://picsum.photos/seed/{{ venue.slug }}/800/450?grayscale';">
+                        {# Don't show caption if it contains venue name, address, or is too long #}
+                        {% if venue.photos[0].caption %}
+                        {% set caption_lower = venue.photos[0].caption.lower() %}
+                        {% set name_lower = venue.name.lower() %}
+                        {% set address_lower = venue.address.lower() if venue.address else '' %}
+                        {# Hide caption if it contains the venue name, address, has a dash (usually means it's a full description), or is too long #}
+                        {% set show_caption = name_lower not in caption_lower and address_lower not in caption_lower and ' - ' not in venue.photos[0].caption and venue.photos[0].caption|length < 100 %}
+                        {% if show_caption %}
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                            <p class="text-white text-sm">{{ venue.photos[0].caption }}</p>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                            <span class="text-gray-400">No image available</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Thumbnail Grid -->
+                    {% if venue.photos|length > 1 %}
+                    <div class="grid grid-cols-5 gap-2">
+                        {% for photo in venue.photos[1:] %}
+                        <div class="aspect-square rounded overflow-hidden bg-gray-100 cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all" onclick="openLightbox({{ loop.index }})">
+                            {% if photo.url %}
+                            <img src="{{ photo.url.replace('maxwidth=1600', 'maxwidth=300').replace('maxwidth=800', 'maxwidth=300') if 'maxwidth=' in photo.url else photo.url + '&maxwidth=300' }}" 
+                                 alt="{{ photo.caption }}" 
+                                 class="w-full h-full object-cover"
+                                 loading="lazy"
+                                 decoding="async"
+                                 onerror="this.onerror=null; this.src='https://picsum.photos/seed/{{ venue.slug }}{{ loop.index }}/200/200?grayscale';">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                                <span class="text-xs text-gray-400">No image</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Lightbox Modal -->
+                <div id="photoLightbox" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" onclick="closeLightbox()">
+                    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                    
+                    <button onclick="event.stopPropagation(); previousPhoto()" class="absolute left-4 text-white hover:text-gray-300 z-10">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <button onclick="event.stopPropagation(); nextPhoto()" class="absolute right-4 text-white hover:text-gray-300 z-10">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    
+                    <div class="max-w-6xl max-h-full" onclick="event.stopPropagation()">
+                        <img id="lightboxImage" src="" alt="" class="max-w-full max-h-[90vh] object-contain">
+                        <p id="lightboxCaption" class="text-white text-center mt-4"></p>
+                        <p class="text-white text-center text-sm mt-2">
+                            <span id="photoCounter"></span>
+                        </p>
+                    </div>
+                </div>
+                
+                <script>
+                const photos = {{ venue.photos|tojson }};
+                let currentPhotoIndex = 0;
+                
+                function openLightbox(index) {
+                    currentPhotoIndex = index;
+                    updateLightboxPhoto();
+                    document.getElementById('photoLightbox').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeLightbox() {
+                    document.getElementById('photoLightbox').classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+                
+                function updateLightboxPhoto() {
+                    const photo = photos[currentPhotoIndex];
+                    const img = document.getElementById('lightboxImage');
+                    const caption = document.getElementById('lightboxCaption');
+                    const counter = document.getElementById('photoCounter');
+                    
+                    // Get full size image URL
+                    let imageUrl = photo.url;
+                    if (imageUrl.includes('maxwidth=')) {
+                        imageUrl = imageUrl.replace(/maxwidth=\d+/, 'maxwidth=1600');
+                    } else if (imageUrl.includes('?')) {
+                        imageUrl += '&maxwidth=1600';
+                    } else {
+                        imageUrl += '?maxwidth=1600';
+                    }
+                    
+                    img.src = imageUrl;
+                    img.alt = photo.caption || '';
+                    
+                    // Only show caption if it doesn't contain venue name
+                    const venueName = "{{ venue.name }}".toLowerCase();
+                    const photoCaption = (photo.caption || '').toLowerCase();
+                    if (photoCaption && !photoCaption.includes(venueName) && !photoCaption.includes('-')) {
+                        caption.textContent = photo.caption;
+                        caption.classList.remove('hidden');
+                    } else {
+                        caption.classList.add('hidden');
+                    }
+                    
+                    counter.textContent = `Photo ${currentPhotoIndex + 1} of ${photos.length}`;
+                }
+                
+                function nextPhoto() {
+                    currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                    updateLightboxPhoto();
+                }
+                
+                function previousPhoto() {
+                    currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+                    updateLightboxPhoto();
+                }
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    if (!document.getElementById('photoLightbox').classList.contains('hidden')) {
+                        if (e.key === 'ArrowRight') nextPhoto();
+                        if (e.key === 'ArrowLeft') previousPhoto();
+                        if (e.key === 'Escape') closeLightbox();
+                    }
+                });
+                </script>
+            </div>
+            {% endif %}
+
+            <!-- Map -->
+            {% if venue.latitude and venue.longitude %}
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-900 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Location
+                    </h2>
+                </div>
+                <div id="venue-map" class="h-96"></div>
+                <script>
+                    function initVenueMap() {
+                        const map = new google.maps.Map(document.getElementById('venue-map'), {
+                            center: { lat: {{ venue.latitude }}, lng: {{ venue.longitude }} },
+                            zoom: 15,
+                            mapTypeControl: true,
+                            streetViewControl: true,
+                            fullscreenControl: true
+                        });
+                        
+                        const marker = new google.maps.Marker({
+                            position: { lat: {{ venue.latitude }}, lng: {{ venue.longitude }} },
+                            map: map,
+                            title: "{{ venue.name }}",
+                            animation: google.maps.Animation.DROP
+                        });
+                        
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: `
+                                <div style="padding: 10px; max-width: 250px;">
+                                    <h3 style="font-weight: bold; margin-bottom: 5px;">{{ venue.name }}</h3>
+                                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 5px;">{{ venue.address }}</p>
+                                    <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                                        <span style="color: #059669; font-weight: 600;">★ {{ venue.rating }}</span>
+                                        <span style="color: #6b7280;">{{ venue.review_count }} reviews</span>
+                                    </div>
+                                    {% if venue.website %}
+                                    <a href="{{ venue.website }}" target="_blank" style="color: #2563eb; font-size: 14px; margin-top: 5px; display: inline-block;">Visit Website →</a>
+                                    {% endif %}
+                                </div>
+                            `
+                        });
+                        
+                        marker.addListener('click', () => {
+                            infoWindow.open(map, marker);
+                        });
+                        
+                        // Open info window by default
+                        infoWindow.open(map, marker);
+                    }
+                    
+                    window.initVenueMap = initVenueMap;
+                </script>
+                <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHFMNOMy3tRV_bwLw-evHqxwLrF9zNQw4&callback=initVenueMap">
+                </script>
+            </div>
+            {% endif %}
+
+            <!-- Hours -->
+            {% if venue.hours %}
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Hours of Operation
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {% for day, hours in venue.hours.items() %}
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium capitalize text-gray-900">{{ day }}</span>
+                        <span class="text-gray-600">{{ hours }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Amenities -->
+            {% if venue.amenities %}
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Amenities</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {% for amenity in venue.amenities %}
+                    <div class="flex items-center">
+                        {% if amenity.available %}
+                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        {% endif %}
+                        <span class="{% if amenity.available %}text-gray-900{% else %}text-gray-400{% endif %}">
+                            {{ amenity.name }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column - Actions & Info -->
+        <div class="space-y-6">
+            <!-- Contact Card -->
+            <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Contact & Actions</h2>
+                
+                <div class="space-y-4">
+                    {% if venue.phone %}
+                    <a href="tel:{{ venue.phone }}" class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            </svg>
+                            <span class="font-medium">{{ venue.phone }}</span>
+                        </div>
+                        <span class="text-blue-600 text-sm">Call</span>
+                    </a>
+                    {% endif %}
+
+                    {% if venue.website %}
+                    <a href="{{ venue.website }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                            </svg>
+                            <span class="font-medium">Website</span>
+                        </div>
+                        <span class="text-blue-600 text-sm">Visit</span>
+                    </a>
+                    {% endif %}
+
+                    {% if venue.latitude and venue.longitude %}
+                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ venue.latitude }},{{ venue.longitude }}" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <div>
+                                <div class="font-medium">{{ venue.city }}, {{ venue.state }}</div>
+                                <div class="text-sm text-gray-600">Get Directions</div>
+                            </div>
+                        </div>
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    {% if request.session.get('user_id') %}
+                    <button onclick="window.location.href='/reviews/add/{{ venue.slug }}'" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                        Write a Review
+                    </button>
+                    <button onclick="saveVenue('{{ venue.id }}')" class="w-full mt-3 border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                        </svg>
+                        Save Venue
+                    </button>
+                    {% else %}
+                    <a href="/auth/login?next={{ request.url.path }}" class="block w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors text-center">
+                        Login to Write a Review
+                    </a>
+                    <a href="/auth/login?next={{ request.url.path }}" class="block w-full mt-3 border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors text-center">
+                        Login to Save Venue
+                    </a>
+                    {% endif %}
+                </div>
+                
+                <script>
+                function saveVenue(venueId) {
+                    fetch(`/api/venues/${venueId}/save`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Venue saved to your favorites!');
+                        } else {
+                            alert('Error saving venue. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error saving venue. Please try again.');
+                    });
+                }
+                </script>
+            </div>
+
+            <!-- Quick Info -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Quick Info</h2>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Sport Type</span>
+                        <span class="font-medium capitalize">{{ venue.sport_type.replace('_', ' ') }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Status</span>
+                        <span class="font-medium capitalize text-green-600">Active</span>
+                    </div>
+                </div>
+
+                <!-- Pricing -->
+                {% if venue.pricing %}
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <h3 class="font-semibold text-gray-900 mb-3">Pricing</h3>
+                    <div class="space-y-2 text-sm">
+                        {% if venue.pricing.admission %}
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Admission</span>
+                            <span class="font-medium">{{ venue.pricing.admission }}</span>
+                        </div>
+                        {% endif %}
+                        {% if venue.pricing.rental %}
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Rental</span>
+                            <span class="font-medium">{{ venue.pricing.rental }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!-- SEO Meta Tags -->
+<meta name="description" content="{{ meta_description }}">
+<meta name="keywords" content="{{ sport_keyword }} near me, {{ sport_plural }} nearby, find {{ sport_keyword }}, local {{ sport_plural }}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ meta_description }}">
+<meta property="og:type" content="website">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ page_title }}",
+  "description": "{{ meta_description }}",
+  "url": "{{ request.url }}"
+}
+</script>
+{% endblock %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ sport_plural }} Near You</h1>
+        <p class="text-xl text-blue-100 mb-8">
+            Find the closest {{ sport_plural.lower() }} to your location with ratings, reviews, and directions.
+        </p>
+        
+        <!-- Geolocation Button -->
+        <button id="findNearbyBtn" 
+                class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-colors shadow-lg">
+            <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Find {{ sport_plural }} Near Me
+        </button>
+        
+        <p class="text-sm text-blue-100 mt-4">
+            <svg class="w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+            </svg>
+            We'll use your location to find nearby venues. Your privacy is protected.
+        </p>
+    </div>
+</div>
+
+<!-- Loading State -->
+<div id="loadingState" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <p class="mt-4 text-gray-600">Finding {{ sport_plural.lower() }} near you...</p>
+</div>
+
+<!-- Results Section -->
+<div id="resultsSection" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">
+            <span id="resultsCount">0</span> {{ sport_plural }} Found Near You
+        </h2>
+        <p class="text-gray-600">Sorted by distance from your location</p>
+    </div>
+    
+    <div id="venuesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Venues will be inserted here by JavaScript -->
+    </div>
+</div>
+
+<!-- Error State -->
+<div id="errorState" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+        <svg class="w-12 h-12 text-yellow-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ sport_plural }} Found Nearby</h3>
+        <p class="text-gray-600 mb-6" id="errorMessage">
+            No {{ sport_plural.lower() }} found within 100 miles of your location.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Try Again
+            </button>
+            <a href="/search" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors inline-block">
+                Search by City
+            </a>
+        </div>
+        <div class="mt-6 pt-6 border-t border-yellow-200">
+            <p class="text-sm text-gray-600 mb-3">Try searching for other types of venues:</p>
+            <div class="flex flex-wrap justify-center gap-2">
+                <a href="/skate-parks/near-me" class="text-blue-600 hover:text-blue-800 text-sm">Skate Parks</a>
+                <span class="text-gray-400">•</span>
+                <a href="/ice-rinks/near-me" class="text-blue-600 hover:text-blue-800 text-sm">Ice Rinks</a>
+                <span class="text-gray-400">•</span>
+                <a href="/roller-rinks/near-me" class="text-blue-600 hover:text-blue-800 text-sm">Roller Rinks</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SEO Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">About {{ sport_plural }} Near You</h2>
+        <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+                Looking for {{ sport_plural.lower() }} in your area? Our location-based search makes it easy to find 
+                the closest {{ sport_plural.lower() }} with just one click. We'll show you venues sorted by distance, 
+                complete with ratings, reviews, photos, and directions.
+            </p>
+            <p class="mb-4">
+                Whether you're looking for {% if indoor_only %}climate-controlled indoor facilities{% else %}indoor or outdoor options{% endif %}, 
+                our comprehensive directory helps you discover the perfect {{ sport_singular.lower() }} for your needs. 
+                Each listing includes detailed information about amenities, hours, and user reviews.
+            </p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3 mt-6">Why Use Our Location Search?</h3>
+            <ul class="list-disc list-inside space-y-2 mb-4">
+                <li>Find the closest {{ sport_plural.lower() }} instantly</li>
+                <li>See accurate distances from your location</li>
+                <li>Read verified reviews and ratings</li>
+                <li>View photos and facility details</li>
+                <li>Get directions with one click</li>
+                <li>Compare multiple venues easily</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Popular Cities -->
+<div class="bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Popular Cities for {{ sport_plural }}</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <a href="/{{ sport_type.replace('_', '-') }}/ca/los-angeles" class="text-blue-600 hover:text-blue-800">Los Angeles, CA</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/ny/new-york" class="text-blue-600 hover:text-blue-800">New York, NY</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/tx/houston" class="text-blue-600 hover:text-blue-800">Houston, TX</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/il/chicago" class="text-blue-600 hover:text-blue-800">Chicago, IL</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/nv/las-vegas" class="text-blue-600 hover:text-blue-800">Las Vegas, NV</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/fl/miami" class="text-blue-600 hover:text-blue-800">Miami, FL</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/az/phoenix" class="text-blue-600 hover:text-blue-800">Phoenix, AZ</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/pa/philadelphia" class="text-blue-600 hover:text-blue-800">Philadelphia, PA</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/tx/dallas" class="text-blue-600 hover:text-blue-800">Dallas, TX</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/ca/san-diego" class="text-blue-600 hover:text-blue-800">San Diego, CA</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/wa/seattle" class="text-blue-600 hover:text-blue-800">Seattle, WA</a>
+            <a href="/{{ sport_type.replace('_', '-') }}/ga/atlanta" class="text-blue-600 hover:text-blue-800">Atlanta, GA</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('findNearbyBtn').addEventListener('click', function() {
+    if (!navigator.geolocation) {
+        showError('Geolocation is not supported by your browser');
+        return;
+    }
+    
+    // Show loading state
+    document.getElementById('loadingState').classList.remove('hidden');
+    this.disabled = true;
+    
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            // Fetch nearby venues
+            console.log('Searching for venues near:', lat, lng);
+            fetch(`/api/venues/nearby?lat=${lat}&lng=${lng}&sport_type={{ sport_type }}&radius=100&limit=50`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API Response:', data);
+                    if (data.success && data.venues.length > 0) {
+                        displayResults(data.venues);
+                    } else {
+                        showError('No {{ sport_plural.lower() }} found within 100 miles of your location. Try browsing by city instead or search for a different sport type.');
+                    }
+                })
+                .catch(error => {
+                    showError('Error loading venues. Please try again.');
+                    console.error('Error:', error);
+                });
+        },
+        function(error) {
+            let message = 'Unable to access your location. ';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    message += 'Please enable location access in your browser settings.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message += 'Location information is unavailable.';
+                    break;
+                case error.TIMEOUT:
+                    message += 'Location request timed out.';
+                    break;
+                default:
+                    message += 'An unknown error occurred.';
+            }
+            showError(message);
+        }
+    );
+});
+
+function displayResults(venues) {
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('resultsSection').classList.remove('hidden');
+    document.getElementById('resultsCount').textContent = venues.length;
+    
+    const venuesList = document.getElementById('venuesList');
+    venuesList.innerHTML = venues.map(venue => `
+        <a href="/venues/${venue.slug}" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-2">
+                    <h3 class="text-lg font-semibold text-gray-900 flex-1">${venue.name}</h3>
+                    <div class="flex items-center text-sm text-gray-600 ml-2">
+                        <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <span class="ml-1 font-semibold">${venue.rating}</span>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        </svg>
+                        ${venue.distance} miles away
+                    </span>
+                </div>
+                
+                <p class="text-sm text-gray-600 mb-3">
+                    ${venue.address}, ${venue.city}, ${venue.state}
+                </p>
+                
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">${venue.review_count} reviews</span>
+                    <span class="text-blue-600 font-medium">View Details →</span>
+                </div>
+            </div>
+        </a>
+    `).join('');
+    
+    // Scroll to results
+    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function showError(message) {
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('errorState').classList.remove('hidden');
+    document.getElementById('errorMessage').textContent = message;
+    document.getElementById('findNearbyBtn').disabled = false;
+}
+</script>
+{% endblock %}

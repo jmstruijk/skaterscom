@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full text-center">
+        <!-- Icon -->
+        <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-yellow-100 mb-6">
+            <svg class="h-12 w-12 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+            </svg>
+        </div>
+        
+        <!-- Title -->
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">
+            {{ feature_name }} Under Maintenance
+        </h1>
+        
+        <!-- Message -->
+        <p class="text-lg text-gray-600 mb-8">
+            {{ message }}
+        </p>
+        
+        <!-- Info Box -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <h3 class="text-sm font-semibold text-blue-900 mb-2">In the meantime...</h3>
+            <p class="text-sm text-blue-800">
+                You can still browse all skating venues, search by location, and view detailed information about each venue.
+            </p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+            <a href="/" class="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                Go to Homepage
+            </a>
+            <a href="/search" class="block w-full bg-white text-blue-600 border-2 border-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                Search Venues
+            </a>
+        </div>
+        
+        <!-- Contact -->
+        <p class="mt-8 text-sm text-gray-500">
+            Questions? <a href="mailto:support@skaters.com" class="text-blue-600 hover:text-blue-800">Contact us</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

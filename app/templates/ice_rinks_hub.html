@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Ice Rinks</h1>
+            <p class="text-xl md:text-2xl text-blue-100 mb-8">
+                Discover the best ice skating rinks across the United States
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="/search?sport_type=ice_skating" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                    Browse All Ice Rinks
+                </a>
+                <a href="/ice-rinks/near-me" class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                    Find Near Me
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- What is an Ice Rink Section -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">What is an Ice Rink?</h2>
+        <div class="prose prose-lg max-w-none">
+            <p class="text-gray-700 leading-relaxed mb-4">
+                An ice rink is a frozen surface designed for ice skating activities. Ice rinks provide a smooth, maintained ice surface for various activities including recreational skating, ice hockey, figure skating, speed skating, and curling. Modern ice rinks use refrigeration systems to maintain consistent ice quality year-round, regardless of outdoor temperatures.
+            </p>
+            <p class="text-gray-700 leading-relaxed">
+                Ice rinks come in various sizes and configurations, from Olympic-sized competition venues to smaller community rinks. They can be indoor or outdoor, permanent or seasonal, and serve different purposes from professional sports to family entertainment.
+            </p>
+        </div>
+    </section>
+
+    <!-- Types of Ice Rinks -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Types of Ice Rinks</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Indoor Ice Rinks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🏢</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Indoor Ice Rinks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Climate-controlled facilities that operate year-round with consistent ice quality. Perfect for hockey leagues, figure skating lessons, and recreational skating regardless of weather.
+                </p>
+                <a href="/indoor-ice-rinks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Indoor Ice Rinks →
+                </a>
+            </div>
+
+            <!-- Outdoor Ice Rinks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">❄️</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Outdoor Ice Rinks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Open-air skating experiences, often seasonal. Includes natural ice rinks, refrigerated outdoor rinks, and scenic locations like parks and plazas. Popular during winter months.
+                </p>
+                <a href="/outdoor-ice-rinks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Outdoor Ice Rinks →
+                </a>
+            </div>
+
+            <!-- Recreational Rinks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">⛸️</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Recreational Rinks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Public ice rinks designed for casual skating, family fun, and social events. Often feature music, lights, and special themed skating sessions.
+                </p>
+                <a href="/ice-rinks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Recreational Rinks →
+                </a>
+            </div>
+
+            <!-- Competition Rinks -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">🏆</span>
+                    <h3 class="text-2xl font-semibold text-gray-900">Competition Rinks</h3>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Professional-grade facilities meeting international standards for hockey tournaments, figure skating competitions, and speed skating events.
+                </p>
+                <a href="/ice-rinks/near-me" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Find Competition Rinks →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ice Rink Activities -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Popular Ice Rink Activities</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">🏒 Ice Hockey</h3>
+                <p class="text-gray-700">
+                    Fast-paced team sport played on ice. Includes youth leagues, adult recreational leagues, and competitive tournaments.
+                </p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">⛸️ Figure Skating</h3>
+                <p class="text-gray-700">
+                    Artistic ice skating with jumps, spins, and choreographed routines. Includes lessons, practice sessions, and competitions.
+                </p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">🎿 Recreational Skating</h3>
+                <p class="text-gray-700">
+                    Casual ice skating for fun and exercise. Perfect for families, dates, and social gatherings.
+                </p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">🏃 Speed Skating</h3>
+                <p class="text-gray-700">
+                    Competitive racing on ice. Includes short track and long track speed skating events.
+                </p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">🥌 Curling</h3>
+                <p class="text-gray-700">
+                    Strategic team sport played on ice with stones. Popular in dedicated curling clubs and multi-purpose rinks.
+                </p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">🎓 Skating Lessons</h3>
+                <p class="text-gray-700">
+                    Learn to skate programs for all ages and skill levels, from beginners to advanced techniques.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse by Location -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Browse Ice Rinks by Location</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="/ice-rinks/ny/new-york" class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900">New York</h3>
+                <p class="text-sm text-gray-600">Ice Rinks in NY</p>
+            </a>
+            <a href="/ice-rinks/il/chicago" class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900">Chicago</h3>
+                <p class="text-sm text-gray-600">Ice Rinks in IL</p>
+            </a>
+            <a href="/ice-rinks/ca/los-angeles" class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900">Los Angeles</h3>
+                <p class="text-sm text-gray-600">Ice Rinks in CA</p>
+            </a>
+            <a href="/ice-rinks/tx/houston" class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900">Houston</h3>
+                <p class="text-sm text-gray-600">Ice Rinks in TX</p>
+            </a>
+            <a href="/ice-rinks/ca/san-francisco" class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900">San Francisco</h3>
+                <p class="text-sm text-gray-600">Ice Rinks in CA</p>
+            </a>
+            <a href="/ice-rinks/nv/las-vegas" class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900">Las Vegas</h3>
+                <p class="text-sm text-gray-600">Ice Rinks in NV</p>
+            </a>
+            <a href="/ice-rinks/pa/philadelphia" class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="font-semibold text-gray-900">Philadelphia</h3>
+                <p class="text-sm text-gray-600">Ice Rinks in PA</p>
+            </a>
+            <a href="/locations/states" class="bg-blue-600 text-white rounded-lg p-4 hover:bg-blue-700 transition-colors flex items-center justify-center">
+                <span class="font-semibold">View All States →</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-blue-600 rounded-lg p-8 md:p-12 text-center text-white">
+        <h2 class="text-3xl font-bold mb-4">Ready to Hit the Ice?</h2>
+        <p class="text-xl text-blue-100 mb-8">
+            Browse ice rinks by location with ratings, reviews, hours, and directions
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="/search?sport_type=ice_skating" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                Browse All Ice Rinks
+            </a>
+            <a href="/ice-rinks/near-me" class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                Find Near Me
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}
