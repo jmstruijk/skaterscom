@@ -12,11 +12,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Database URL - defaults to SQLite for development
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "sqlite:///./skaters.db"  # SQLite for easy development
-    # For production PostgreSQL: "postgresql://user:password@localhost/skaters_db"
-)
+# Use absolute path for Railway deployment
+import sys
+if os.getenv("RAILWAY_ENVIRONMENT"):
+    # Railway deployment - use absolute path
+    DB_PATH = "/app/skaters.db"
+    DEFAULT_DB_URL = f"sqlite:///{DB_PATH}"
+else:
+    # Local development
+    DEFAULT_DB_URL = "sqlite:///./skaters.db"
+
+DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_DB_URL)
 
 # Create engine
 engine = create_engine(
