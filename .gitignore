@@ -14,6 +14,10 @@ ENV/
 *.sqlite
 *.sqlite3
 
+# Large data files
+google_maps_*.json
+scraped_*.json
+
 # IDE
 .vscode/
 .idea/
